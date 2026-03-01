@@ -87,6 +87,7 @@ function ProblemPage() {
 
     const result = await executeCode(selectedLanguage, code);
     setOutput(result);
+    console.log("Execution result:", result);
     setIsRunning(false);
 
     // check if code executed successfully and matches expected output
