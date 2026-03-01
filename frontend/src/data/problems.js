@@ -339,6 +339,75 @@ print(maxArea([1,1]))  # Expected: 1`,
       java: "49\n1",
     },
   },
+
+  "longest-substring-without-repeating": {
+  id: "longest-substring-without-repeating",
+  title: "Longest Substring Without Repeating Characters",
+  difficulty: "Medium",
+  category: "String • Sliding Window",
+  description: {
+    text: "Given a string s, find the length of the longest substring without repeating characters.",
+    notes: [
+      "A substring is a contiguous sequence of characters.",
+      "Use an efficient approach with O(n) time complexity."
+    ],
+  },
+  examples: [
+    {
+      input: 's = "abcabcbb"',
+      output: "3",
+      explanation: 'The answer is "abc", with length 3.',
+    },
+    {
+      input: 's = "bbbbb"',
+      output: "1",
+    },
+    {
+      input: 's = "pwwkew"',
+      output: "3",
+    },
+  ],
+  constraints: [
+    "0 ≤ s.length ≤ 5 * 10⁴",
+    "s consists of English letters, digits, symbols and spaces."
+  ],
+  starterCode: {
+    javascript: `function lengthOfLongestSubstring(s) {
+  // Write your solution here
+  
+}
+
+// Test cases
+console.log(lengthOfLongestSubstring("abcabcbb")); // Expected: 3
+console.log(lengthOfLongestSubstring("bbbbb")); // Expected: 1
+console.log(lengthOfLongestSubstring("pwwkew")); // Expected: 3`,
+    python: `def lengthOfLongestSubstring(s):
+    # Write your solution here
+    pass
+
+print(lengthOfLongestSubstring("abcabcbb"))  # Expected: 3
+print(lengthOfLongestSubstring("bbbbb"))  # Expected: 1
+print(lengthOfLongestSubstring("pwwkew"))  # Expected: 3`,
+    java: `class Solution {
+    public static int lengthOfLongestSubstring(String s) {
+        // Write your solution here
+        return 0;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(lengthOfLongestSubstring("abcabcbb")); // Expected: 3
+        System.out.println(lengthOfLongestSubstring("bbbbb")); // Expected: 1
+        System.out.println(lengthOfLongestSubstring("pwwkew")); // Expected: 3
+    }
+}`,
+  },
+  expectedOutput: {
+    javascript: "3\n1\n3",
+    python: "3\n1\n3",
+    java: "3\n1\n3",
+  },
+},
+
 };
 
 export const LANGUAGE_CONFIG = {
