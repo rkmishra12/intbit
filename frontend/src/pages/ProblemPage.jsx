@@ -7,7 +7,7 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import ProblemDescription from "../components/ProblemDescription";
 import OutputPanel from "../components/OutputPanel";
 import CodeEditorPanel from "../components/CodeEditorPanel";
-import { executeCode } from "../lib/piston";
+import { executeCode } from "../lib/codeExecution";
 
 import toast from "react-hot-toast";
 import confetti from "canvas-confetti";
@@ -103,7 +103,7 @@ function ProblemPage() {
         toast.error("Tests failed. Check your output!");
       }
     } else {
-      toast.error("Code execution failed!");
+      toast.error(result.error || "Code execution failed!");
     }
   };
 

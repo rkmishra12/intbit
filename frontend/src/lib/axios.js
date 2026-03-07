@@ -1,10 +1,7 @@
 import axios from "axios";
 
-const apiUrl = import.meta.env.VITE_API_URL;
-
-if (!apiUrl) {
-  throw new Error("Missing VITE_API_URL");
-}
+// In dev, default to same-origin so LAN clients work with Vite proxy.
+const apiUrl = import.meta.env.VITE_API_URL || "/api";
 
 if (import.meta.env.PROD && apiUrl.includes("localhost")) {
   throw new Error("Invalid VITE_API_URL for production. Use your deployed backend URL.");

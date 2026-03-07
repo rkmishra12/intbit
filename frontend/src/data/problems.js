@@ -408,6 +408,188 @@ print(lengthOfLongestSubstring("pwwkew"))  # Expected: 3`,
   },
 },
 
+  "binary-search": {
+    id: "binary-search",
+    title: "Binary Search",
+    difficulty: "Easy",
+    category: "Array â€¢ Binary Search",
+    description: {
+      text: "Given a sorted array of integers nums and an integer target, return the index of target if it exists, otherwise return -1.",
+      notes: ["You must write an algorithm with O(log n) runtime complexity."],
+    },
+    examples: [
+      {
+        input: "nums = [-1,0,3,5,9,12], target = 9",
+        output: "4",
+      },
+      {
+        input: "nums = [-1,0,3,5,9,12], target = 2",
+        output: "-1",
+      },
+    ],
+    constraints: ["1 <= nums.length <= 10^4", "-10^4 < nums[i], target < 10^4", "nums is sorted in ascending order"],
+    starterCode: {
+      javascript: `function search(nums, target) {
+  // Write your solution here
+  
+}
+
+// Test cases
+console.log(search([-1, 0, 3, 5, 9, 12], 9)); // Expected: 4
+console.log(search([-1, 0, 3, 5, 9, 12], 2)); // Expected: -1`,
+      python: `def search(nums, target):
+    # Write your solution here
+    pass
+
+# Test cases
+print(search([-1, 0, 3, 5, 9, 12], 9))  # Expected: 4
+print(search([-1, 0, 3, 5, 9, 12], 2))  # Expected: -1`,
+      java: `class Solution {
+    public static int search(int[] nums, int target) {
+        // Write your solution here
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(search(new int[]{-1, 0, 3, 5, 9, 12}, 9)); // Expected: 4
+        System.out.println(search(new int[]{-1, 0, 3, 5, 9, 12}, 2)); // Expected: -1
+    }
+}`,
+    },
+    expectedOutput: {
+      javascript: "4\n-1",
+      python: "4\n-1",
+      java: "4\n-1",
+    },
+  },
+
+  "merge-sorted-array": {
+    id: "merge-sorted-array",
+    title: "Merge Sorted Array",
+    difficulty: "Easy",
+    category: "Array â€¢ Two Pointers",
+    description: {
+      text: "You are given two integer arrays nums1 and nums2, sorted in non-decreasing order, and two integers m and n. Merge nums2 into nums1 as one sorted array.",
+      notes: ["The final sorted array should be stored inside nums1.", "nums1 has length m + n, where the last n elements are 0 placeholders."],
+    },
+    examples: [
+      {
+        input: "nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3",
+        output: "[1,2,2,3,5,6]",
+      },
+      {
+        input: "nums1 = [1], m = 1, nums2 = [], n = 0",
+        output: "[1]",
+      },
+    ],
+    constraints: ["nums1.length == m + n", "nums2.length == n", "-10^9 <= nums1[i], nums2[j] <= 10^9"],
+    starterCode: {
+      javascript: `function merge(nums1, m, nums2, n) {
+  // Write your solution here
+}
+
+// Test cases
+let a = [1, 2, 3, 0, 0, 0];
+merge(a, 3, [2, 5, 6], 3);
+console.log(a); // Expected: [1,2,2,3,5,6]
+
+let b = [1];
+merge(b, 1, [], 0);
+console.log(b); // Expected: [1]`,
+      python: `def merge(nums1, m, nums2, n):
+    # Write your solution here
+    pass
+
+# Test cases
+a = [1, 2, 3, 0, 0, 0]
+merge(a, 3, [2, 5, 6], 3)
+print(a)  # Expected: [1, 2, 2, 3, 5, 6]
+
+b = [1]
+merge(b, 1, [], 0)
+print(b)  # Expected: [1]`,
+      java: `import java.util.*;
+
+class Solution {
+    public static void merge(int[] nums1, int m, int[] nums2, int n) {
+        // Write your solution here
+    }
+
+    public static void main(String[] args) {
+        int[] a = {1, 2, 3, 0, 0, 0};
+        merge(a, 3, new int[]{2, 5, 6}, 3);
+        System.out.println(Arrays.toString(a)); // Expected: [1, 2, 2, 3, 5, 6]
+
+        int[] b = {1};
+        merge(b, 1, new int[]{}, 0);
+        System.out.println(Arrays.toString(b)); // Expected: [1]
+    }
+}`,
+    },
+    expectedOutput: {
+      javascript: "[1,2,2,3,5,6]\n[1]",
+      python: "[1, 2, 2, 3, 5, 6]\n[1]",
+      java: "[1, 2, 2, 3, 5, 6]\n[1]",
+    },
+  },
+
+  "product-of-array-except-self": {
+    id: "product-of-array-except-self",
+    title: "Product of Array Except Self",
+    difficulty: "Medium",
+    category: "Array â€¢ Prefix Suffix",
+    description: {
+      text: "Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i].",
+      notes: ["Solve it without using division.", "Target time complexity is O(n)."],
+    },
+    examples: [
+      {
+        input: "nums = [1,2,3,4]",
+        output: "[24,12,8,6]",
+      },
+      {
+        input: "nums = [-1,1,0,-3,3]",
+        output: "[0,0,9,0,0]",
+      },
+    ],
+    constraints: ["2 <= nums.length <= 10^5", "-30 <= nums[i] <= 30"],
+    starterCode: {
+      javascript: `function productExceptSelf(nums) {
+  // Write your solution here
+  
+}
+
+// Test cases
+console.log(productExceptSelf([1, 2, 3, 4])); // Expected: [24,12,8,6]
+console.log(productExceptSelf([-1, 1, 0, -3, 3])); // Expected: [0,0,9,0,0]`,
+      python: `def productExceptSelf(nums):
+    # Write your solution here
+    pass
+
+# Test cases
+print(productExceptSelf([1, 2, 3, 4]))  # Expected: [24, 12, 8, 6]
+print(productExceptSelf([-1, 1, 0, -3, 3]))  # Expected: [0, 0, 9, 0, 0]`,
+      java: `import java.util.*;
+
+class Solution {
+    public static int[] productExceptSelf(int[] nums) {
+        // Write your solution here
+        return new int[0];
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Arrays.toString(productExceptSelf(new int[]{1, 2, 3, 4}))); // Expected: [24, 12, 8, 6]
+        System.out.println(Arrays.toString(productExceptSelf(new int[]{-1, 1, 0, -3, 3}))); // Expected: [0, 0, 9, 0, 0]
+    }
+}`,
+    },
+    expectedOutput: {
+      javascript: "[24,12,8,6]\n[0,0,9,0,0]",
+      python: "[24, 12, 8, 6]\n[0, 0, 9, 0, 0]",
+      java: "[24, 12, 8, 6]\n[0, 0, 9, 0, 0]",
+    },
+  },
+
 };
 
 export const LANGUAGE_CONFIG = {
