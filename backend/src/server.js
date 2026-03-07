@@ -11,7 +11,6 @@ import chatRoutes from "./routes/chatRoutes.js";
 import sessionRoutes from "./routes/sessionRoute.js";
 import codeRoutes from "./routes/codeRoutes.js";
 
-
 const app = express();
 
 const allowedOrigins = (ENV.CLIENT_URL || "")
@@ -24,16 +23,26 @@ app.use(express.json());
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow server-to-server calls and same-origin requests without origin header.
+      // In production, require explicit browser origin allowlist.
+      if (ENV.NODE_ENV === "production") {
+        if (!origin) return callback(new Error("Origin header required"));
+        if (allowedOrigins.includes(origin)) return callback(null, true);
+        return callback(new Error("CORS origin not allowed"));
+      }
+
+      // Dev: allow no-origin (Postman/server calls), allow listed, and allow LAN testing.
       if (!origin) return callback(null, true);
       if (allowedOrigins.includes(origin)) return callback(null, true);
-      // In local development, allow LAN origins (e.g. http://192.168.x.x:5173).
-      if (ENV.NODE_ENV !== "production") return callback(null, true);
-      return callback(new Error("CORS origin not allowed"));
+
+      // Optional: narrow this instead of allowing all in dev.
+      return callback(null, true);
     },
     credentials: true,
-  })
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    optionsSuccessStatus: 204,
+  }),
 );
+
 app.use(clerkMiddleware()); // this adds auth field to request object: req.auth()
 
 app.use("/api/inngest", serve({ client: inngest, functions }));
@@ -41,16 +50,16 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/sessions", sessionRoutes);
 app.use("/api/code", codeRoutes);
 
-
 app.get("/health", (req, res) => {
   res.status(200).json({ msg: "api is up and running" });
 });
 
-
 const startServer = async () => {
   try {
     await connectDB();
-    app.listen(ENV.PORT, () => console.log("Server is running on port:", ENV.PORT));
+    app.listen(ENV.PORT, () =>
+      console.log("Server is running on port:", ENV.PORT),
+    );
   } catch (error) {
     console.error("Error starting the server", error);
   }
