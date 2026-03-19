@@ -2,6 +2,8 @@ import { chatClient, streamClient } from "../lib/stream.js";
 import Session from "../models/Session.js";
 
 export async function createSession(req, res) {
+  let session;
+
   try {
     const { problem, difficulty } = req.body;
     const userId = req.user._id;
@@ -15,7 +17,7 @@ export async function createSession(req, res) {
     const callId = `session_${Date.now()}_${Math.random().toString(36).substring(7)}`;
 
     // create session in db
-    const session = await Session.create({ problem, difficulty, host: userId, callId });
+    session = await Session.create({ problem, difficulty, host: userId, callId });
 
     // create stream video call
     await streamClient.video.call("default", callId).getOrCreate({
@@ -36,8 +38,19 @@ export async function createSession(req, res) {
 
     res.status(201).json({ session });
   } catch (error) {
+    if (session?._id) {
+      await Session.findByIdAndDelete(session._id).catch((cleanupError) => {
+        console.error("Error rolling back failed session creation:", cleanupError.message);
+      });
+    }
+
     console.log("Error in createSession controller:", error.message);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({
+      message:
+        process.env.NODE_ENV === "development"
+          ? error.message || "Failed to create session"
+          : "Internal Server Error",
+    });
   }
 }
 

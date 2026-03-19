@@ -1,5 +1,6 @@
 import { clerkClient, requireAuth } from "@clerk/express";
 import User from "../models/User.js";
+import { upsertStreamUser } from "../lib/stream.js";
 
 export const protectRoute = [
   requireAuth(),
@@ -25,21 +26,39 @@ export const protectRoute = [
         }
 
         const fullName = `${clerkUser.firstName || ""} ${clerkUser.lastName || ""}`.trim();
+        const nextUserData = {
+          clerkId,
+          email: primaryEmail,
+          name: fullName || primaryEmail.split("@")[0],
+          profileImage: clerkUser.imageUrl || "",
+        };
 
-        user = await User.findOneAndUpdate(
-          { clerkId },
-          {
-            clerkId,
-            email: primaryEmail,
-            name: fullName || primaryEmail.split("@")[0],
-            profileImage: clerkUser.imageUrl || "",
-          },
-          { upsert: true, new: true, setDefaultsOnInsert: true }
-        );
+        // Reuse an existing email-matched user record before inserting a new one.
+        user = await User.findOne({ email: primaryEmail });
+
+        if (user) {
+          user.clerkId = clerkId;
+          user.name = nextUserData.name;
+          user.profileImage = nextUserData.profileImage;
+          await user.save();
+        } else {
+          user = await User.findOneAndUpdate({ clerkId }, nextUserData, {
+            upsert: true,
+            new: true,
+            setDefaultsOnInsert: true,
+          });
+        }
       }
 
       // attach user to req
       req.user = user;
+
+      // Keep Stream user state in sync even when webhook delivery is delayed or missed.
+      await upsertStreamUser({
+        id: user.clerkId.toString(),
+        name: user.name,
+        image: user.profileImage,
+      });
 
       next();
     } catch (error) {

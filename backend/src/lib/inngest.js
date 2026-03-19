@@ -20,7 +20,19 @@ const syncUser = inngest.createFunction(
       profileImage: image_url,
     };
 
-    await User.create(newUser);
+    const existingUser = await User.findOne({
+      $or: [{ clerkId: id }, { email: newUser.email }],
+    });
+
+    if (existingUser) {
+      existingUser.clerkId = newUser.clerkId;
+      existingUser.email = newUser.email;
+      existingUser.name = newUser.name;
+      existingUser.profileImage = newUser.profileImage;
+      await existingUser.save();
+    } else {
+      await User.create(newUser);
+    }
 
     await upsertStreamUser({
       id: newUser.clerkId.toString(),
