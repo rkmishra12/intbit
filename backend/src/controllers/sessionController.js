@@ -18,6 +18,7 @@ export async function createSession(req, res) {
 
     // create session in db
     session = await Session.create({ problem, difficulty, host: userId, callId });
+    console.log("createSession: session document created", session._id.toString());
 
     // create stream video call
     await streamClient.video.call("default", callId).getOrCreate({
@@ -26,15 +27,16 @@ export async function createSession(req, res) {
         custom: { problem, difficulty, sessionId: session._id.toString() },
       },
     });
+    console.log("createSession: stream video call created", callId);
 
     // chat messaging
     const channel = chatClient.channel("messaging", callId, {
       name: `${problem} Session`,
-      created_by_id: clerkId,
       members: [clerkId],
+      created_by_id: clerkId,
     });
-
-    await channel.create();
+    await channel.create({ created_by_id: clerkId });
+    console.log("createSession: stream chat channel created", callId);
 
     res.status(201).json({ session });
   } catch (error) {

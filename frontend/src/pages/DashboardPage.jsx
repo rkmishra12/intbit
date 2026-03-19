@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router";
 import { useUser } from "@clerk/clerk-react";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useActiveSessions, useCreateSession, useMyRecentSessions } from "../hooks/useSessions";
+import { sessionApi } from "../api/sessions";
 
 import Navbar from "../components/Navbar";
 import WelcomeSection from "../components/WelcomeSection";
@@ -18,24 +20,47 @@ function DashboardPage() {
 
   const createSessionMutation = useCreateSession();
 
+  const extractSessionId = (payload) => payload?.session?._id || payload?.session?.id || payload?.sessionId;
+
   const { data: activeSessionsData, isLoading: loadingActiveSessions } = useActiveSessions();
   const { data: recentSessionsData, isLoading: loadingRecentSessions } = useMyRecentSessions();
 
-  const handleCreateRoom = () => {
+  const handleCreateRoom = async () => {
     if (!roomConfig.problem || !roomConfig.difficulty) return;
 
-    createSessionMutation.mutate(
-      {
+    try {
+      const payload = {
         problem: roomConfig.problem,
         difficulty: roomConfig.difficulty.toLowerCase(),
-      },
-      {
-        onSuccess: (data) => {
-          setShowCreateModal(false);
-          navigate(`/session/${data.session._id}`);
-        },
+      };
+
+      const data = await createSessionMutation.mutateAsync(payload);
+      let sessionId = extractSessionId(data);
+
+      if (!sessionId) {
+        const fallback = await sessionApi.getActiveSessions();
+        const matchingSession = fallback?.sessions?.find(
+          (session) =>
+            session.problem === payload.problem &&
+            session.difficulty === payload.difficulty &&
+            session.host?.clerkId === user?.id
+        );
+
+        sessionId = matchingSession?._id || matchingSession?.id;
       }
-    );
+
+      if (!sessionId) {
+        console.error("createSession success but session id missing", data);
+        toast.error("Session created, but opening it failed. Please open it from Active Sessions.");
+        setShowCreateModal(false);
+        return;
+      }
+
+      setShowCreateModal(false);
+      navigate(`/session/${sessionId}`);
+    } catch {
+      // handled by the mutation's onError toast
+    }
   };
 
   const activeSessions = activeSessionsData?.sessions || [];

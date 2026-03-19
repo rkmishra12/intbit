@@ -50,6 +50,10 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/sessions", sessionRoutes);
 app.use("/api/code", codeRoutes);
 
+app.get("/", (_, res) => {
+  res.status(200).send("IntBit backend is running");
+});
+
 app.get("/health", (req, res) => {
   res.status(200).json({ msg: "api is up and running" });
 });
