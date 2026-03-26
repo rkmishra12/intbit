@@ -6,7 +6,6 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
-    host: true,
     // Keep browser calls same-origin in dev; Vite proxies to backend.
     proxy: {
       "/api": {

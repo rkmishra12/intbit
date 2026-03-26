@@ -90,11 +90,6 @@ function HomePage() {
                   <ArrowRightIcon className="size-5" />
                 </button>
               </SignInButton>
-
-              <button className="btn btn-outline btn-lg">
-                <VideoIcon className="size-5" />
-                Watch Demo
-              </button>
             </div>
 
             {/* STATS */}

@@ -89,7 +89,7 @@ function DashboardPage() {
               sessions={activeSessions}
               isLoading={loadingActiveSessions}
               isUserInSession={isUserInSession}
-            />
+            />  
           </div>
 
           <RecentSessions sessions={recentSessions} isLoading={loadingRecentSessions} />
